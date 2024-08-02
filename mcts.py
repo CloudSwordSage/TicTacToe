@@ -121,12 +121,12 @@ class TreeNode:
         return self.parent is None
     
 class MCTS:
-    def __init__(self, policy_value_fn:Callable, c_puct:float=1.0, n_playout:int=2000) -> None:
+    def __init__(self, policy_value_fn:Callable[[Game], tuple[list[tuple[int, float]], float]], c_puct:float=1.0, n_playout:int=2000) -> None:
         """
         初始化函数，用于创建MCTS树。
         
         Args:
-            policy_value_fn (function): 策略价值函数，输入当前状态，输出每个动作的概率分布和当前状态的价值。
+            policy_value_fn (Callable[[Game], tuple[list[tuple[int, float]], float]]): 策略价值函数，输入当前状态，输出每个动作的概率分布和当前状态的价值。
             c_puct (float, optional):UCT公式中的探索系数，用于平衡探索和利用。默认为1.0。
             n_playout (int, optional):每次模拟游戏进行的次数。默认为2000。
         

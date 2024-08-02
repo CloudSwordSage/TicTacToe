@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 from game import Game
+from typing import Any, Callable
 
 class TreeNode:
     def __init__(self, parent:int|None=None, prior_p:float=0.0):
@@ -120,7 +121,7 @@ class TreeNode:
         return self.parent is None
     
 class MCTS:
-    def __init__(self, policy_value_fn:function, c_puct:float=1.0, n_playout:int=2000) -> None:
+    def __init__(self, policy_value_fn:Callable, c_puct:float=1.0, n_playout:int=2000) -> None:
         """
         初始化函数，用于创建MCTS树。
         

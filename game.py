@@ -48,12 +48,12 @@ def list2str(board: list[list[int]]) -> list[list[str]]:
                 _board[i][j] = 'O'
     return _board
 
-def print_board(board: list[list[str]], disappear: list[tuple[int]]=[]) -> None:
+def print_board(board: list[list[int]], disappear: list[tuple[int]]=[]) -> None:
     """
     打印井字棋游戏棋盘，并可在指定位置标记即将消失的棋子。
     
     Args:
-        board (list[list[str]]): 井字棋游戏棋盘，每个元素为一个字符串，表示对应位置的棋子或空格。
+        board (list[list[int]]): 井字棋游戏棋盘，每个元素为一个数字，表示对应位置的棋子或空格。
         disappear (list[tuple[int]], optional): 即将消失的棋子的位置列表，每个元素为一个包含两个整数的元组，分别表示行索引和列索引。默认为空列表。
     
     Returns:
@@ -128,7 +128,7 @@ def get_legal_position_id(board: list[list[int]]) -> list[int]:
     获取在给定棋盘上所有合法的落子位置ID列表
     
     Args:
-        board (list[list[int]]): 9x9棋盘，其中0表示空位，1到9表示不同玩家的棋子
+        board (list[list[int]]): 3x3棋盘，其中0表示空位，1与2表示不同玩家的棋子
     
     Returns:
         list[int]: 所有合法的落子位置ID列表，按字典序排列
@@ -149,13 +149,14 @@ class Game:
     
     def init_board(self, start_player: int) -> None:
         """
-        初始化棋盘。
+        初始化游戏棋盘和玩家状态。
         
         Args:
-            start_player (int): 1或2，表示谁先开始。
+            start_player (int): 起始玩家编号，1代表玩家1，2代表玩家2。
         
         Returns:
             None
+        
         """
         self.board = copy.deepcopy(str2list(init_board))
         self.player1 = [False] * 4

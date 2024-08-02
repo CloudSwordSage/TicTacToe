@@ -165,6 +165,7 @@ class Game:
         else:
             self.current_player = 2
         self.winner = None
+        self.tie = False
     
     @property
     def availables(self):
@@ -190,29 +191,33 @@ class Game:
             None
         """
         y, x = move_id2move_actions[move_id]
-        self.board[y][x] = self.current_player
+        _board = copy.deepcopy(self.board)
+        _board[y][x] = self.current_player
         if self.current_player == 1:
             self.player1.append((y, x))
-            if len(self.player1) >= 4:
+            if len(self.player1) >= 5:
                 self.player1.pop(0)
         else:
             self.player2.append((y, x))
-            if len(self.player2) >= 4:
+            if len(self.player2) >= 5:
                 self.player2.pop(0)
 
         if self.player1[0]:
             y, x = self.player1[0]
-            self.board[y][x] = 0
-            self.player1 = self.player1[1:]
+            _board[y][x] = 0
+            self.player1[0] = False
 
         if self.player2[0]:
             y, x = self.player2[0]
-            self.board[y][x] = 0
-            self.player2 = self.player2[1:]
+            _board[y][x] = 0
+            self.player2[0] = False
 
-        if is_win(self.board, self.current_player):
+        if is_win(_board, self.current_player):
             self.winner = self.current_player
+        if all(0 not in row for row in _board):
+            self.tie = True
         self.current_player = 3 - self.current_player
+        self.board = copy.deepcopy(_board)
     
     def is_win(self) -> tuple[bool, int]:
         """
@@ -245,7 +250,7 @@ class Game:
         if done:
             return True, winner
         else:
-            if all(0 not in row for row in self.board):
+            if self.tie:
                 return True, None
         return False, None
     
@@ -287,6 +292,20 @@ class Game:
             _state[i][j] = 0
         return _state
 
+    @property
+    def current_player_id(self) -> int:
+        """
+        获取当前玩家ID。
+        
+        Args:
+            无参数。
+        
+        Returns:
+            int: 当前玩家ID。
+        
+        """
+        return self.current_player
+
 
 if __name__ == '__main__':
     game = Game()
@@ -310,7 +329,3 @@ if __name__ == '__main__':
             else:
                 print(f'{"X" if winner == 1 else "O"}获胜！')
             break
-
-    # state = [[0, 2, 2], [1, 2, 0], [0, 2, 0]]
-    # disappear = [(0, 1), (2, 1)]
-    # print_board(state, disappear=disappear)
